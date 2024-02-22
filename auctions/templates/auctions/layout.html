@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Auctions{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+        <style>
+            /* Custom styles for navbar */
+            .navbar {
+                background-color: #343a40; /* Dark background color for navbar */
+                border-radius: 8px; /* Rounded corners */
+            }
+        
+            .navbar-nav .nav-link {
+                color: #dcdcdc; /* Light color for navbar links */
+                border-radius: 8px; /* Rounded corners for links */
+                transition: color 0.3s, background-color 0.3s;
+            }
+        
+            .navbar-nav .nav-link:hover {
+                color: #ffffff; /* Light color on hover */
+                background-color: #555; /* Darker background on hover */
+            }
+
+        
+            /* Custom styles for form controls */
+            .form-group input,
+            .form-group textarea {
+                background-color: #303030; /* Dark background color */
+                color: #c0c0c0; /* Light text color */
+                border: 1px solid #555; /* Dark border color */
+                border-radius: 8px; /* Rounded corners */
+                transition: background-color 0.3s, border-color 0.3s;
+            }
+        
+            .form-group input:hover,
+            .form-group textarea:hover {
+                background-color: #404040; /* Darker background on hover */
+                border-color: #777; /* Lighter border color on hover */
+            }
+        
+            .form-group label {
+                color: #ffffff; /* Light color for labels */
+            }
+        
+            /* Custom styles for buttons */
+            .btn {
+                border-radius: 8px; /* Rounded corners */
+                transition: background-color 0.3s, border-color 0.3s;
+            }
+        </style>
+        
+    </head>
+    <body class="bg-dark">
+        <h1 class=" display-4 text-light">Auctions</h1>
+        <div class="text-light">
+            {% if user.is_authenticated %}
+                Signed in as <strong>{{ user.username }}</strong>.
+            {% else %}
+                Not signed in.
+            {% endif %}
+        </div>
+        <ul class="nav navbar-dark">
+            <li class="nav-item">
+                <a class="nav-link text-light" href="{% url 'index' %}">Active Listings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light" href="{% url 'category' %}">Category</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'create' %}">Create Listing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'watchlist' %}">
+                        Watchlist
+                        {% if user.get_watchlist_length > 0 %}
+                            <span class="badge badge-dark">{{ user.get_watchlist_length }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'logout' %}">Log Out</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'login' %}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'register' %}">Register</a>
+                </li>
+            {% endif %}
+        </ul>        
+        <hr class="bg-light">
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,37 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if Create_Listing %}
+        <h2 class="display-5 text-light">Create Listing</h2>
+            <form method="post" enctype="multipart/form-data" action="{% url 'create' %}" class="form-group bg-dark text-muted">
+                {% csrf_token %}
+                {{ form.as_p }} <br>
+                <button class="btn btn-primary" type="submit">Submit</button>    
+            </form>
+    {% else %}
+        <h2 class=" display-5 text-light">Active Listings</h2>
+        {% for listing in listings %}
+            {% if not listing.closed %}
+                <div class="container-fluid text-light listing-container">
+                    <div class="row">
+                        {% if listing.image %}
+                            <div class="col-md-4">
+                                <img src="{{ listing.image.url }}" alt="{{ listing.title }}" class="img-fluid">
+                            </div>
+                        {% endif %}
+                        <div class="col-md-8">
+                        <a class="nav-link text-light" href="{% url 'listing' listing.id %}">
+                            <h4><b>{{ listing.title }}</b></h4>
+                            <p>$ {{ listing.starting_bid }}</p>
+                            <p>{{ listing.description }}</p>
+                        </a>
+                        </div>
+                    </div>
+                </div>
+                <hr class="text-light">
+            {% endif %}
+        {% empty %}
+            <p class="text-light">No Listings</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
